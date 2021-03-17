@@ -1,4 +1,12 @@
 .app{
-  width: 600px;
+  width: 800px;
   margin: 40px auto;
+}
+.main_wrapper{
+  display: flex;
+  align-items: center;
+}
+.image_block{
+  width: 500px;
+  min-width: 500px;
 }
