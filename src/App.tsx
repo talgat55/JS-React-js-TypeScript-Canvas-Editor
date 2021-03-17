@@ -1,18 +1,33 @@
 import React, {useState} from 'react';
-import {Stage, Layer,Image, Text} from "react-konva";
+import {Stage, Layer, Image, Text} from "react-konva";
 import './App.css';
+
+interface ISizesImageElement {
+    width: number,
+    height: number,
+}
+
 const App = () => {
-    const [stateImage , setStateImage] = useState<CanvasImageSource | null | undefined>(null);
-    const  handlerAddImage =(e: React.ChangeEvent<HTMLInputElement>)=>{
+    const [stateImage, setStateImage] = useState<CanvasImageSource | null | undefined>(null);
+    const [sizesImage, setizesImage] = useState<ISizesImageElement>({
+        width: 0,
+        height: 0
+    });
+    const handlerAddImage = (e: React.ChangeEvent<HTMLInputElement>) => {
         let input = e.target;
         if (input?.files?.length) {
             let reader = new FileReader();
             reader.onload = async (event: any) => {
-                if(event !==undefined){
+                if (event !== undefined) {
                     let imageObj = new window.Image();
                     imageObj.onload = function () {
-                        console.log(imageObj)
                         setStateImage(imageObj);
+                        setizesImage(
+                            {
+                                width: imageObj.width,
+                                height: imageObj.height,
+                            }
+                        )
                     };
                     imageObj.src = event?.target?.result;
                 }
@@ -28,6 +43,10 @@ const App = () => {
                         stateImage !== null ?
                             <Image
                                 image={stateImage}
+                                cropWidth={sizesImage.width}
+                                cropHeight={sizesImage.height}
+                                width={500}
+                                height={400}
                             />
                             :
                             null
