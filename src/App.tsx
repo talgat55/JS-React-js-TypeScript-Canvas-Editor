@@ -1,4 +1,4 @@
-import React, {useEffect, useState,useRef} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {Stage, Layer, Image} from "react-konva";
 import './App.css';
 
@@ -15,20 +15,34 @@ const App = () => {
         height: 0
     });
 
-    useEffect(()=>{
-        if(stateImage !==null){
+    useEffect(() => {
+        if (stateImage !== null) {
 
         }
-    },[stateImage])
+    }, [stateImage])
 
-    const handlerChooseEffect = (effect: string) =>{
-        if(effect === 'ocean'){
-            stageRef?.current.toImage({
-                callback(img: HTMLImageElement) {
-                    console.log(img)
-                    let imageDataFiltered = window?.pixelsJS?.filterImgData(img, "ocean");
-                }
-            });
+    const handlerChooseEffect = (effect: string) => {
+        if (effect === 'ocean') {
+            let tempObjCanvas = stageRef.current.toCanvas();
+            let ctx_ = tempObjCanvas.getContext("2d");
+            let imageData = ctx_.getImageData(0, 0, 500, 400);
+            let imageDataFiltered = window.pixelsJS.filterImgData(imageData, "ocean");
+            ctx_.putImageData(imageDataFiltered, 0, 0);
+            tempObjCanvas.toBlob(function (blob: Blob | null) {
+               let tempImgSrc = URL.createObjectURL(blob);
+                let imageObj = new window.Image();
+                imageObj.onload = function () {
+                    seSizesImage(
+                        {
+                            width: 500,
+                            height: 400,
+                        }
+                    )
+                    setStateImage(imageObj);
+                };
+                imageObj.src = tempImgSrc;
+            }, "image/jpeg", 1);
+
         }
     }
 
@@ -81,7 +95,9 @@ const App = () => {
                 </div>
                 <div>
                     <div
-                        onClick={()=>{handlerChooseEffect('ocean')}}
+                        onClick={() => {
+                            handlerChooseEffect('ocean')
+                        }}
                     >
                         ocean
                     </div>
