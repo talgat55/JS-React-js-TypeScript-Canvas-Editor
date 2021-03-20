@@ -10,3 +10,16 @@
   width: 500px;
   min-width: 500px;
 }
+.btn{
+  display: inline-block;
+  padding: 4px 18px;
+  background-color: darkslategray;
+  transition: all .3s;
+  margin: 0 5px 5px 0;
+  color: #fff;
+  line-height: 1.5;
+  cursor: pointer;
+}
+.btn:hover{
+  opacity: .5;
+}

@@ -7,6 +7,56 @@ interface ISizesImageElement {
     height: number,
 }
 
+
+const LIST_ITEMS = [
+    {
+        id: 1,
+        type: 'ocean'
+    },
+    {
+        id: 2,
+        type: 'purple_min_noise'
+    },
+    {
+        id: 3,
+        type: 'rosetint'
+    },
+    {
+        id: 4,
+        type: 'blue_min_noise'
+    },
+    {
+        id: 5,
+        type: 'warmth'
+    },
+    {
+        id: 6,
+        type: 'greyscale'
+    },
+    {
+        id: 7,
+        type: 'haze'
+    },
+    {
+        id: 8,
+        type: 'serenity'
+    },
+    {
+        id: 9,
+        type: 'pink_aura'
+    },
+    {
+        id: 10,
+        type: 'vintage'
+    },
+    {
+        id: 11,
+        type: 'extreme_offset_red'
+    },
+
+];
+
+
 const App = () => {
     const stageRef = useRef<any | null>(null);
     const [stateImage, setStateImage] = useState<CanvasImageSource | null | undefined>(null);
@@ -22,14 +72,14 @@ const App = () => {
     }, [stateImage])
 
     const handlerChooseEffect = (effect: string) => {
-        if (effect === 'ocean') {
+        if (effect !== null) {
             let tempObjCanvas = stageRef.current.toCanvas();
             let ctx_ = tempObjCanvas.getContext("2d");
             let imageData = ctx_.getImageData(0, 0, 500, 400);
-            let imageDataFiltered = window.pixelsJS.filterImgData(imageData, "ocean");
+            let imageDataFiltered = window.pixelsJS.filterImgData(imageData, effect);
             ctx_.putImageData(imageDataFiltered, 0, 0);
             tempObjCanvas.toBlob(function (blob: Blob | null) {
-               let tempImgSrc = URL.createObjectURL(blob);
+                let tempImgSrc = URL.createObjectURL(blob);
                 let imageObj = new window.Image();
                 imageObj.onload = function () {
                     seSizesImage(
@@ -94,13 +144,19 @@ const App = () => {
                     </Stage>
                 </div>
                 <div>
-                    <div
-                        onClick={() => {
-                            handlerChooseEffect('ocean')
-                        }}
-                    >
-                        ocean
-                    </div>
+                    {
+                        LIST_ITEMS.map(item => (
+                            <div
+                                key={item.id}
+                                className="btn"
+                                onClick={() => {
+                                    handlerChooseEffect(item.type)
+                                }}
+                            >
+                                {item.type}
+                            </div>
+                        ))
+                    }
                 </div>
             </div>
 
